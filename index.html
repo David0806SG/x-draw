@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>x-draw — whiteboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="fonts.css?v=10" />
+<link rel="stylesheet" href="style.css?v=10" />
+</head>
+<body>
+  <!-- ===== Left sidebar : scenes ===== -->
+  <aside id="sidebar">
+    <div class="sb-header">
+      <div class="sb-logo"><span class="logo-dot">x</span><span class="logo-name">x-draw</span></div>
+      <button id="btn-collapse" class="icon-btn" title="Collapse sidebar">⟨</button>
+    </div>
+    <div class="sb-search">
+      <input id="scene-search" type="text" placeholder="Quick search" spellcheck="false" />
+    </div>
+    <div class="sb-scenes-head">
+      <span>Scenes</span>
+      <button id="btn-new-scene" class="new-scene-btn" title="New scene">+</button>
+    </div>
+    <div id="scene-list"></div>
+  </aside>
+  <button id="btn-expand" class="icon-btn" title="Open sidebar" style="display:none">⟩</button>
+
+  <!-- ===== Canvas area ===== -->
+  <main id="canvas-wrap">
+    <canvas id="canvas"></canvas>
+
+    <!-- Top toolbar -->
+    <div id="toolbar">
+      <button class="tool" data-tool="hand"   title="Hand — pan canvas (H)"><svg viewBox="0 0 24 24"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-4.5a1.5 1.5 0 0 1 3 0V11m0-3a1.5 1.5 0 0 1 3 0v7a6 6 0 0 1-6 6h-1.6a6 6 0 0 1-4.6-2.15L3.4 15.5a1.55 1.55 0 0 1 2.3-2.05L7 14.8V7.5a1.5 1.5 0 0 1 3 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="tool" data-tool="select" title="Select — move & resize (V or 1)"><svg viewBox="0 0 24 24"><path d="M5 3l14 8-6.5 1.5L16 19l-2.8 1.4-3.4-6.4L5 18z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span class="kbd">1</span></button>
+      <div class="tb-sep"></div>
+      <button class="tool" data-tool="rectangle" title="Rectangle (R or 2)"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="kbd">2</span></button>
+      <button class="tool" data-tool="diamond" title="Diamond (D or 3)"><svg viewBox="0 0 24 24"><path d="M12 3.5L21 12l-9 8.5L3 12z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span class="kbd">3</span></button>
+      <button class="tool" data-tool="ellipse" title="Ellipse (O or 4)"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="8.5" ry="7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="kbd">4</span></button>
+      <button class="tool" data-tool="arrow" title="Arrow (A or 5)"><svg viewBox="0 0 24 24"><path d="M5 19L18 6m0 0h-7m7 0v7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="kbd">5</span></button>
+      <button class="tool" data-tool="line" title="Line (L or 6)"><svg viewBox="0 0 24 24"><path d="M4.5 19.5l15-15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span class="kbd">6</span></button>
+      <button class="tool" data-tool="draw" title="Draw — freehand (P or 7)"><svg viewBox="0 0 24 24"><path d="M4 20c.5-3 1-4.5 2.5-6L17 3.5a2 2 0 0 1 3 3L9.5 17c-1.5 1.5-3 2-5.5 3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span class="kbd">7</span></button>
+      <button class="tool" data-tool="text" title="Text (T or 8)"><svg viewBox="0 0 24 24"><path d="M5 6V4h14v2M12 4v16m-3 0h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span class="kbd">8</span></button>
+      <button class="tool" data-tool="image" title="Insert image (9) — or paste from clipboard"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="10" r="1.6" fill="currentColor"/><path d="M4 17l5-4.5 4 3.5 3-2.5 4 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span class="kbd">9</span></button>
+      <button class="tool" data-tool="eraser" title="Eraser (E or 0)"><svg viewBox="0 0 24 24"><path d="M18.5 13.5L10 22H5.5l-2-2a2 2 0 0 1 0-2.8L14 6.5a2 2 0 0 1 2.8 0l3.7 3.7a2 2 0 0 1 0 2.8zM8 12l5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span class="kbd">0</span></button>
+    </div>
+    <div id="canvas-hint">To move canvas, hold <kbd>Scroll wheel</kbd> or <kbd>Space</kbd> while dragging, or use the hand tool</div>
+
+    <!-- Scene title -->
+    <div id="scene-title-wrap"><input id="scene-title" spellcheck="false" title="Rename scene" /></div>
+
+    <!-- Top-right actions -->
+    <div id="top-actions">
+      <button id="btn-theme" class="action-btn icon-only" title="Toggle dark mode">
+        <svg class="ic-moon" viewBox="0 0 24 24"><path d="M20.4 14.2A8.5 8.5 0 0 1 9.8 3.6 8.5 8.5 0 1 0 20.4 14.2z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        <svg class="ic-sun" viewBox="0 0 24 24" style="display:none"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M4.9 4.9l1.9 1.9M17.2 17.2l1.9 1.9M19.1 4.9l-1.9 1.9M6.8 17.2l-1.9 1.9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      </button>
+      <button id="btn-open" class="action-btn" title="Open .xdraw file">Open</button>
+      <button id="btn-save" class="action-btn" title="Download scene as .xdraw file">Save</button>
+      <button id="btn-export" class="action-btn primary" title="Export canvas as PNG">Export PNG</button>
+    </div>
+
+    <!-- Left property panel -->
+    <div id="panel">
+      <div class="p-section" data-p="stroke">
+        <div class="p-label">Stroke</div>
+        <div class="swatches" id="stroke-swatches"></div>
+      </div>
+      <div class="p-section" data-p="background">
+        <div class="p-label">Background</div>
+        <div class="swatches" id="bg-swatches"></div>
+      </div>
+      <div class="p-section" data-p="fillStyle">
+        <div class="p-label">Fill</div>
+        <div class="btn-row" id="fill-btns">
+          <button data-v="hachure" title="Hachure"><svg viewBox="0 0 20 20"><rect x="2.5" y="2.5" width="15" height="15" rx="2" fill="none" stroke="currentColor"/><path d="M5 15l8-10M4 11l6-7.5M8 16.5l8-10M12 16.5l4.5-5.5" stroke="currentColor" stroke-width="1" fill="none"/></svg></button>
+          <button data-v="cross-hatch" title="Cross-hatch"><svg viewBox="0 0 20 20"><rect x="2.5" y="2.5" width="15" height="15" rx="2" fill="none" stroke="currentColor"/><path d="M5 15l8-10M8 16.5l8-10M5 5l10 10M8 3.5l8.5 8.5" stroke="currentColor" stroke-width="1" fill="none"/></svg></button>
+          <button data-v="solid" title="Solid"><svg viewBox="0 0 20 20"><rect x="2.5" y="2.5" width="15" height="15" rx="2" fill="currentColor"/></svg></button>
+        </div>
+      </div>
+      <div class="p-section" data-p="strokeWidth">
+        <div class="p-label">Stroke width</div>
+        <div class="btn-row" id="width-btns">
+          <button data-v="1" title="Thin"><svg viewBox="0 0 20 20"><path d="M3 10h14" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></button>
+          <button data-v="2" title="Bold"><svg viewBox="0 0 20 20"><path d="M3 10h14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button>
+          <button data-v="4" title="Extra bold"><svg viewBox="0 0 20 20"><path d="M3 10h14" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/></svg></button>
+        </div>
+      </div>
+      <div class="p-section" data-p="strokeStyle">
+        <div class="p-label">Stroke style</div>
+        <div class="btn-row" id="style-btns">
+          <button data-v="solid" title="Solid"><svg viewBox="0 0 20 20"><path d="M3 10h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+          <button data-v="dashed" title="Dashed"><svg viewBox="0 0 20 20"><path d="M3 10h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="4 3"/></svg></button>
+          <button data-v="dotted" title="Dotted"><svg viewBox="0 0 20 20"><path d="M3 10h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="0.5 4"/></svg></button>
+        </div>
+      </div>
+      <div class="p-section" data-p="edges">
+        <div class="p-label">Edges</div>
+        <div class="btn-row" id="edge-btns">
+          <button data-v="sharp" title="Sharp"><svg viewBox="0 0 20 20"><path d="M4 16V6a2 2 0 0 1 0 0h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4 6h12M4 6v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+          <button data-v="round" title="Round"><svg viewBox="0 0 20 20"><path d="M4 16V10a6 6 0 0 1 6-6h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+        </div>
+      </div>
+      <div class="p-section" data-p="fontSize">
+        <div class="p-label">Font size</div>
+        <div class="btn-row" id="font-btns">
+          <button data-v="16" title="Small">S</button>
+          <button data-v="20" title="Medium">M</button>
+          <button data-v="28" title="Large">L</button>
+          <button data-v="36" title="X-Large">XL</button>
+        </div>
+      </div>
+      <div class="p-section" data-p="opacity">
+        <div class="p-label">Opacity</div>
+        <input type="range" id="opacity-range" min="10" max="100" step="10" value="100" />
+      </div>
+      <div class="p-section" data-p="actions" id="sel-actions" style="display:none">
+        <div class="p-label">Actions</div>
+        <div class="btn-row">
+          <button id="act-dup" title="Duplicate (Ctrl+D)"><svg viewBox="0 0 20 20"><rect x="3" y="3" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="7" y="7" width="10" height="10" rx="2" fill="#fff" stroke="currentColor" stroke-width="1.5"/></svg></button>
+          <button id="act-front" title="Bring to front"><svg viewBox="0 0 20 20"><rect x="6" y="6" width="11" height="11" rx="1.5" fill="currentColor" opacity=".35"/><rect x="3" y="3" width="11" height="11" rx="1.5" fill="#fff" stroke="currentColor" stroke-width="1.5"/></svg></button>
+          <button id="act-back" title="Send to back"><svg viewBox="0 0 20 20"><rect x="3" y="3" width="11" height="11" rx="1.5" fill="currentColor" opacity=".35"/><rect x="6" y="6" width="11" height="11" rx="1.5" fill="#fff" stroke="currentColor" stroke-width="1.5"/></svg></button>
+          <button id="act-del" title="Delete (Del)"><svg viewBox="0 0 20 20"><path d="M4 6h12M8 6V4h4v2m-7 0l.7 10.5a1.5 1.5 0 0 0 1.5 1.5h5.6a1.5 1.5 0 0 0 1.5-1.5L15 6M8.5 9v6M11.5 9v6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom-left: zoom + undo/redo -->
+    <div id="bottom-bar">
+      <div class="zoom-ctl">
+        <button id="zoom-out" title="Zoom out">−</button>
+        <button id="zoom-reset" title="Reset zoom to 100%">100%</button>
+        <button id="zoom-in" title="Zoom in">+</button>
+      </div>
+      <div class="hist-ctl">
+        <button id="btn-undo" title="Undo (Ctrl+Z)"><svg viewBox="0 0 24 24"><path d="M8 5L4 9l4 4M4.5 9H15a5 5 0 0 1 0 10h-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button id="btn-redo" title="Redo (Ctrl+Shift+Z)"><svg viewBox="0 0 24 24"><path d="M16 5l4 4-4 4M19.5 9H9a5 5 0 0 0 0 10h4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+
+    <input type="file" id="file-image" accept="image/*" style="display:none" />
+    <input type="file" id="file-open" accept=".xdraw,.json,.excalidraw" style="display:none" />
+  </main>
+
+  <script src="lib/rough.js?v=10"></script>
+  <script>
+    if (!window.rough) {
+      document.write('<script src="https://unpkg.com/roughjs@4.6.6/bundled/rough.js"><\/script>');
+    }
+  </script>
+  <script src="app.js?v=10"></script>
+</body>
+</html>
