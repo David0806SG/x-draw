@@ -6,6 +6,10 @@ arrows, lots of handwritten-style text notes, and many named scenes.
 
 No build step, no backend, no account. Everything lives in your browser's localStorage.
 
+**▶ Try it live: [david0806sg.github.io/x-draw](https://david0806sg.github.io/x-draw/)**
+
+![x-draw — hand-drawn flowchart with labeled shapes, bound arrows, and the styling panel](docs/x-draw-screenshot.png)
+
 ## Run it
 
 ```bash
