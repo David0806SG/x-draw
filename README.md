@@ -56,7 +56,9 @@ Any static file server works (`npx serve`, nginx, ...). Opening `index.html` dir
 - **Undo / redo** (Ctrl+Z / Ctrl+Shift+Z), up to 100 steps.
 - **Export PNG** (2x, auto-cropped to content) and **Save/Open** `.xdraw` JSON files
   (plain `{elements: [...]}` open format). Exports are always
-  light-mode, matching how the data is stored.
+  light-mode, matching how the data is stored. In Chrome/Edge, Save/Export opens a
+  file dialog that remembers your last folder (e.g. `~/my-x-draw`); other browsers
+  download to the default downloads folder.
 - **Dark mode** — sun/moon toggle in the top-right; follows your system preference on
   first launch and remembers your choice. Drawings keep their stored
   colors and the canvas is inverted with a filter, so black ink turns white and pastel

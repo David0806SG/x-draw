@@ -1730,10 +1730,33 @@ document.getElementById('btn-undo').addEventListener('click', undo);
 document.getElementById('btn-redo').addEventListener('click', redo);
 
 // ---------- export / save / open ----------
-function download(filename, href) {
+/* Browsers can't write to a fixed path (e.g. ~/my-x-draw) unprompted. Where the
+   File System Access API exists (Chrome/Edge, secure context) we open a save
+   dialog whose `id` makes the browser reopen the last-used folder — pick
+   ~/my-x-draw once and every save defaults there. Otherwise (Firefox/Safari,
+   file://) we fall back to a plain download. */
+async function saveFile(filename, blob, description, accept) {
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        id: 'my-x-draw',
+        suggestedName: filename,
+        types: [{ description, accept }],
+      });
+      const w = await handle.createWritable();
+      await w.write(blob);
+      await w.close();
+      return;
+    } catch (err) {
+      if (err.name === 'AbortError') return; // user cancelled the dialog
+      // any other failure: fall through to plain download
+    }
+  }
+  const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = href; a.download = filename;
+  a.href = url; a.download = filename;
   document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
 }
 
 document.getElementById('btn-export').addEventListener('click', () => {
@@ -1751,7 +1774,10 @@ document.getElementById('btn-export').addEventListener('click', () => {
   const erc = rough.canvas(ec);
   for (const el of state.elements) renderElement(ectx, erc, el);
   const meta = state.scenes.find(s => s.id === state.sceneId);
-  download(`${(meta ? meta.name : 'x-draw').replace(/[^\w\- ]+/g, '')}.png`, ec.toDataURL('image/png'));
+  ec.toBlob(blob =>
+    saveFile(`${(meta ? meta.name : 'x-draw').replace(/[^\w\- ]+/g, '')}.png`, blob,
+      'PNG image', { 'image/png': ['.png'] }),
+    'image/png');
 });
 
 document.getElementById('btn-save').addEventListener('click', () => {
@@ -1762,7 +1788,8 @@ document.getElementById('btn-save').addEventListener('click', () => {
     elements: state.elements,
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  download(`${(meta ? meta.name : 'scene').replace(/[^\w\- ]+/g, '')}.xdraw`, URL.createObjectURL(blob));
+  saveFile(`${(meta ? meta.name : 'scene').replace(/[^\w\- ]+/g, '')}.xdraw`, blob,
+    'x-draw scene', { 'application/json': ['.xdraw'] });
 });
 
 document.getElementById('btn-open').addEventListener('click', () =>
