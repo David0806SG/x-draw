@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-x-draw is a local-first, Excalidraw-style whiteboard: vanilla JavaScript + rough.js, one HTML page,
+x-draw is a local-first, hand-drawn-style whiteboard: vanilla JavaScript + rough.js, one HTML page,
 no build step, no backend, no framework. All user data (scenes) lives in the browser's localStorage —
 the repo contains only the app. Live deployment: https://david0806sg.github.io/x-draw/ (GitHub Pages,
 serves the `main` branch root; every push to `main` redeploys).
@@ -61,7 +61,7 @@ and flushed on `beforeunload`. Quota exhaustion is caught and only console-warne
 white background; `body.dark` applies `invert(93%) hue-rotate(180deg)` to the canvas element
 (style.css). PNG export and `.xdraw` files therefore always use the true stored colors.
 
-**Fonts.** Excalifont (the official Excalidraw font) is vendored in `fonts/` as unicode-range subsets
+**Fonts.** The x-draw handwriting font is vendored in `fonts/` as unicode-range subsets
 declared in `fonts.css`; canvas text measurement (`measureText`) depends on it being loaded.
 
 ## Repo conventions

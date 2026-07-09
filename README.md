@@ -1,6 +1,6 @@
 # x-draw
 
-A lightweight, local-first whiteboard in the spirit of Excalidraw — built around a daily
+A lightweight, local-first whiteboard — built around a daily
 note-taking and brainstorming workflow: hand-drawn diagrams, pastel boxes connected by
 arrows, lots of handwritten-style text notes, and many named scenes.
 
@@ -35,7 +35,7 @@ Any static file server works (`npx serve`, nginx, ...). Opening `index.html` dir
   selected line/arrow, drag any point handle to reshape it, drag a segment's midpoint
   handle to add a bend, and drop a point back in line with its neighbours to remove it.
   The Edges property switches between smooth curves (round) and elbow segments (sharp).
-- **Text notes** in Excalifont — the official Excalidraw handwriting font, vendored locally —
+- **Text notes** in the x-draw handwriting font, vendored locally —
   click with the text tool or double-click anywhere; multi-line, four sizes (S/M/L/XL).
 - **Shape labels** — double-click a rectangle/diamond/ellipse (or click it with the text tool)
   to type a label that stays centered and follows the shape through move, resize, rotate,
@@ -55,10 +55,10 @@ Any static file server works (`npx serve`, nginx, ...). Opening `index.html` dir
   search, rename (edit title top-left), delete. Autosaved to localStorage.
 - **Undo / redo** (Ctrl+Z / Ctrl+Shift+Z), up to 100 steps.
 - **Export PNG** (2x, auto-cropped to content) and **Save/Open** `.xdraw` JSON files
-  (plain `{elements: [...]}` — Excalidraw-inspired open format). Exports are always
+  (plain `{elements: [...]}` open format). Exports are always
   light-mode, matching how the data is stored.
 - **Dark mode** — sun/moon toggle in the top-right; follows your system preference on
-  first launch and remembers your choice. Like Excalidraw, drawings keep their stored
+  first launch and remembers your choice. Drawings keep their stored
   colors and the canvas is inverted with a filter, so black ink turns white and pastel
   fills turn into dark tones automatically.
 
@@ -88,13 +88,13 @@ Any static file server works (`npx serve`, nginx, ...). Opening `index.html` dir
 ## Files
 
 - `index.html` — layout, toolbar, panel, sidebar
-- `style.css` — Excalidraw-style UI theme
+- `style.css` — hand-drawn-style UI theme
 - `app.js` — canvas engine, tools, binding, scenes, persistence
-- `fonts.css` + `fonts/` — vendored Excalifont (MIT, from the excalidraw npm package)
+- `fonts.css` + `fonts/` — vendored handwriting font (MIT-licensed; see `fonts/LICENSE`)
 - `lib/rough.js` — vendored rough.js 4.6.6 (works offline; CDN fallback wired in)
 
 ## Notes & limits
 
 - Data is per-browser (localStorage). Use **Save** to back up scenes as `.xdraw` files.
 - Large pasted images count against the ~5 MB localStorage quota.
-- Not yet implemented vs Excalidraw: real-time collaboration, shape libraries.
+- Not yet implemented: real-time collaboration, shape libraries.

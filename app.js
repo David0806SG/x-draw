@@ -1,5 +1,5 @@
 /* =========================================================================
-   x-draw — a lightweight Excalidraw-style whiteboard
+   x-draw — a lightweight hand-drawn-style whiteboard
    Features: hand-drawn shapes (rough.js), arrows, freehand, text notes,
    images, multi-scene sidebar with search, autosave to localStorage,
    undo/redo, zoom/pan, PNG export, .xdraw save/open.
@@ -8,7 +8,7 @@
 'use strict';
 
 // ---------- constants ----------
-const FONT_FAMILY = '"Excalifont", "Patrick Hand", "Segoe Print", "Comic Sans MS", cursive';
+const FONT_FAMILY = '"x-draw", "Patrick Hand", "Segoe Print", "Comic Sans MS", cursive';
 const LINE_HEIGHT = 1.25;
 const STROKE_COLORS = ['#1e1e1e', '#e03131', '#2f9e44', '#1971c2', '#f08c00'];
 const BG_COLORS = ['transparent', '#ffc9c9', '#b2f2bb', '#a5d8ff', '#ffec99'];

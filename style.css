@@ -46,7 +46,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 30px; height: 30px; border-radius: 8px;
   background: var(--accent); color: #fff;
   display: flex; align-items: center; justify-content: center;
-  font-family: "Excalifont", "Patrick Hand", "Segoe Print", "Comic Sans MS", cursive;
+  font-family: "x-draw", "Patrick Hand", "Segoe Print", "Comic Sans MS", cursive;
   font-size: 19px;
 }
 .icon-btn {
@@ -231,7 +231,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   resize: none;
   overflow: hidden;
   white-space: pre;
-  font-family: "Excalifont", "Patrick Hand", "Segoe Print", "Comic Sans MS", cursive;
+  font-family: "x-draw", "Patrick Hand", "Segoe Print", "Comic Sans MS", cursive;
   line-height: 1.25;
   padding: 0;
   margin: 0;
@@ -253,7 +253,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* ================= Dark mode =================
    Canvas content is always painted in light-mode colors and inverted with a
-   filter (the Excalidraw approach) — element data never changes. */
+   filter — element data never changes. */
 body.dark {
   --ui-bg: #232329;
   --ui-border: #33333f;
