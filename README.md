@@ -98,3 +98,12 @@ Any static file server works (`npx serve`, nginx, ...). Opening `index.html` dir
 - Data is per-browser (localStorage). Use **Save** to back up scenes as `.xdraw` files.
 - Large pasted images count against the ~5 MB localStorage quota.
 - Not yet implemented: real-time collaboration, shape libraries.
+
+## License
+
+x-draw is released under the [MIT License](LICENSE).
+
+Vendored third-party components, both MIT-licensed:
+
+- [rough.js](https://roughjs.com) (`lib/rough.js`)
+- the bundled handwriting font (`fonts/`, see [`fonts/LICENSE`](fonts/LICENSE))
